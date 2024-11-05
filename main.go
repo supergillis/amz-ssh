@@ -78,6 +78,10 @@ func main() {
 				Name:  "debug",
 				Usage: "Print debug information",
 			},
+			&cli.BoolFlag{
+				Name:  "private",
+				Usage: "Use private endpoint",
+			},
 		},
 		Commands: []*cli.Command{
 			{
@@ -147,6 +151,10 @@ func run(c *cli.Context) error {
 
 	chain := []sshutils.EndpointIface{
 		bastionEndpoint,
+	}
+
+	if c.Bool("private") {
+		bastionEndpoint.UsePrivate = true
 	}
 
 	for _, ep := range c.StringSlice("destination") {
